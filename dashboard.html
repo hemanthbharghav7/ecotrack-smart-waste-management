@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanPick Dashboard</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-trash-alt logo-icon"></i>
+                    <span>CleanPick</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-page="dashboard">
+                    <i class="fas fa-th-large"></i> <span>Dashboard</span>
+                </a>
+                <a href="#" class="menu-item" data-page="schedule">
+                    <i class="fas fa-calendar-plus"></i> <span>Schedule Pickup</span>
+                </a>
+                <a href="#" class="menu-item" data-page="history">
+                    <i class="fas fa-history"></i> <span>History</span>
+                </a>
+                <a href="#" class="menu-item" data-page="notifications">
+                    <i class="fas fa-bell"></i> <span>Notifications</span>
+                </a>
+                <a href="#" class="menu-item" data-page="rewards">
+                    <i class="fas fa-trophy"></i> <span>Rewards</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="#" class="menu-item logout">
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Top Header -->
+            <header class="top-bar">
+                <div class="welcome-section">
+                    <h1 id="greeting">Welcome Back, User! 👋</h1>
+                    <p class="subtitle">Let's make the world cleaner, one pickup at a time.</p>
+                </div>
+
+                <div class="header-actions">
+                    <!-- Notification Bell -->
+                    <div class="action-wrapper">
+                        <button id="notification-btn" class="icon-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </button>
+                        <!-- Dropdown -->
+                        <div id="notification-dropdown" class="dropdown-panel hidden">
+                            <div class="dropdown-header">
+                                <h3>Notifications</h3>
+                                <span class="clear-all">Mark all read</span>
+                            </div>
+                            <ul class="notif-list">
+                                <li class="notif-item unread">
+                                    <div class="notif-icon info"><i class="fas fa-info-circle"></i></div>
+                                    <div class="notif-text">
+                                        <p class="title">Pickup Approved</p>
+                                        <p class="desc">Your schedule for tomorrow is confirmed.</p>
+                                    </div>
+                                </li>
+                                <li class="notif-item unread">
+                                    <div class="notif-icon success"><i class="fas fa-leaf"></i></div>
+                                    <div class="notif-text">
+                                        <p class="title">Points Received</p>
+                                        <p class="desc">+500 Eco Points added to your wallet.</p>
+                                    </div>
+                                </li>
+                                <li class="notif-item">
+                                    <div class="notif-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+                                    <div class="notif-text">
+                                        <p class="title">Complete Profile</p>
+                                        <p class="desc">Please add your phone number.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="dropdown-footer">View All</div>
+                        </div>
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="icon-btn">
+                        <i class="fas fa-moon"></i>
+                    </button>
+
+                    <!-- Clock -->
+                    <div class="digital-clock">
+                        <span id="time">00:00:00</span>
+                        <span id="date">Mon, Jan 01</span>
+                    </div>
+                    
+                    <!-- User Profile (Optional visual) -->
+                    <div class="user-avatar">
+                        <img src="https://ui-avatars.com/api/?name=User&background=5A9988&color=fff" alt="User">
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-scroll-area">
+                
+                <!-- 1. DASHBOARD PAGE -->
+                <section id="dashboard-page" class="page-section active">
+                    
+                    <!-- Quick Stats Row -->
+                    <div class="stats-container">
+                        <div class="stat-card teal">
+                            <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                            <div class="stat-info">
+                                <h3>Next Pickup</h3>
+                                <p class="value">Thursday</p>
+                                <span class="trend">Upcoming</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card salmon">
+                            <div class="stat-icon"><i class="fas fa-truck"></i></div>
+                            <div class="stat-info">
+                                <h3>Last Status</h3>
+                                <p class="value">Completed</p>
+                                <span class="trend positive">Success</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card green">
+                            <div class="stat-icon"><i class="fas fa-leaf"></i></div>
+                            <div class="stat-info">
+                                <h3>Eco Points</h3>
+                                <p class="value">4,560</p>
+                                <span class="trend positive">+500 this week</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card blue">
+                            <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Pickups</h3>
+                                <p class="value">24</p>
+                                <span class="trend">Lifetime</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Layout: Main + Side -->
+                    <div class="dashboard-grid">
+                        <!-- Activity Chart / Summary -->
+                        <div class="content-card main-card">
+                            <div class="card-header">
+                                <h2>Pending Activity</h2>
+                                <button class="btn-text">View History</button>
+                            </div>
+                            <div class="activity-feed">
+                                <div class="activity-row warning">
+                                    <div class="row-icon"><i class="fas fa-clock"></i></div>
+                                    <div class="row-content">
+                                        <h4>Pending Request</h4>
+                                        <p>Mixed Waste pickup scheduled for Friday is awaiting admin approval.</p>
+                                    </div>
+                                    <button class="btn-sm">View</button>
+                                </div>
+                                <div class="activity-row info">
+                                    <div class="row-icon"><i class="fas fa-bell"></i></div>
+                                    <div class="row-content">
+                                        <h4>New Notification</h4>
+                                        <p>System maintenance scheduled for tonight (12 AM - 2 AM).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Reward Card -->
+                        <div class="content-card side-card reward-preview">
+                            <div class="card-header">
+                                <h2>Your Tier</h2>
+                            </div>
+                            <div class="tier-visual">
+                                <div class="circle-progress">
+                                    <i class="fas fa-medal"></i>
+                                </div>
+                                <h3>Bronze Member</h3>
+                                <p>440 pts to Silver</p>
+                                <div class="progress-track">
+                                    <div class="progress-fill" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. SCHEDULE PICKUP PAGE -->
+                <section id="schedule-page" class="page-section">
+                    <div class="form-container">
+                        <div class="form-header">
+                            <h2><i class="fas fa-calendar-plus"></i> Schedule New Pickup</h2>
+                            <p>Fill in the details below to request a waste collection.</p>
+                        </div>
+                        
+                        <form class="premium-form">
+                            <!-- Section 1 -->
+                            <div class="form-section">
+                                <h3 class="section-label">Location & Waste Details</h3>
+                                <div class="input-group">
+                                    <label>Full Address</label>
+                                    <div class="input-wrapper">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <input type="text" placeholder="e.g. 123 Green Street, Apt 4B">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Waste Type</label>
+                                    <div class="select-wrapper">
+                                        <i class="fas fa-recycle"></i>
+                                        <select>
+                                            <option>Mixed Household Waste</option>
+                                            <option>Plastic (Recyclable)</option>
+                                            <option>Metal</option>
+                                            <option>E-Waste</option>
+                                            <option>Organic / Compost</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down arrow"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 2 -->
+                            <div class="form-section">
+                                <h3 class="section-label">Date & Instructions</h3>
+                                <div class="row">
+                                    <div class="input-group half">
+                                        <label>Preferred Date</label>
+                                        <div class="input-wrapper">
+                                            <input type="date">
+                                        </div>
+                                    </div>
+                                    <div class="input-group half">
+                                        <label>Time Slot</label>
+                                        <div class="select-wrapper">
+                                            <select>
+                                                <option>Morning (8 AM - 12 PM)</option>
+                                                <option>Afternoon (12 PM - 4 PM)</option>
+                                            </select>
+                                            <i class="fas fa-chevron-down arrow"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Driver Notes (Optional)</label>
+                                    <textarea rows="3" placeholder="e.g. Gate code is 1234, beware of dog."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Upload -->
+                            <div class="upload-box">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p><strong>Click to upload</strong> waste image (Optional)</p>
+                                <span class="note">JPG, PNG up to 5MB</span>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-cancel">Cancel</button>
+                                <button type="button" class="btn-submit">Confirm Schedule</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- 3. HISTORY PAGE -->
+                <section id="history-page" class="page-section">
+                    <div class="content-card full-width">
+                        <div class="card-header">
+                            <h2>Pickup History</h2>
+                            <div class="filters">
+                                <button class="filter-btn active">All</button>
+                                <button class="filter-btn">Completed</button>
+                                <button class="filter-btn">Pending</button>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                        <th>Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="date-badge">
+                                                <span class="d">20</span>
+                                                <span class="m">OCT</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="type-tag recycling">Recycling</span></td>
+                                        <td>Morning Slot</td>
+                                        <td><span class="status complete">Completed</span></td>
+                                        <td class="pts">+500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="date-badge">
+                                                <span class="d">06</span>
+                                                <span class="m">OCT</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="type-tag mixed">Mixed</span></td>
+                                        <td>Evening Slot</td>
+                                        <td><span class="status complete">Completed</span></td>
+                                        <td class="pts">+300</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="date-badge">
+                                                <span class="d">25</span>
+                                                <span class="m">SEP</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="type-tag ewaste">E-Waste</span></td>
+                                        <td>Morning Slot</td>
+                                        <td><span class="status declined">Declined</span></td>
+                                        <td class="pts zero">0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. NOTIFICATIONS PAGE (Full List) -->
+                <section id="notifications-page" class="page-section">
+                    <div class="content-card full-width">
+                        <div class="card-header">
+                            <h2>All Notifications</h2>
+                        </div>
+                        <div class="notif-feed">
+                            <!-- Repeated items for demo -->
+                            <div class="feed-item">
+                                <div class="icon-box success"><i class="fas fa-check"></i></div>
+                                <div class="feed-content">
+                                    <h4>Pickup Completed</h4>
+                                    <p>Your recycling pickup on Oct 20 was completed successfully.</p>
+                                    <span class="time">2 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="icon-box info"><i class="fas fa-thumbs-up"></i></div>
+                                <div class="feed-content">
+                                    <h4>Request Approved</h4>
+                                    <p>Admin approved your request for E-waste collection.</p>
+                                    <span class="time">1 day ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. REWARDS PAGE -->
+                <section id="rewards-page" class="page-section">
+                    <div class="rewards-layout">
+                        <!-- Balance Card -->
+                        <div class="balance-card">
+                            <div class="balance-content">
+                                <p>Total Eco Balance</p>
+                                <h1>4,560 <span>pts</span></h1>
+                                <div class="progress-bar">
+                                    <div class="fill" style="width: 75%"></div>
+                                </div>
+                                <p class="progress-text">440 points to Silver Tier</p>
+                            </div>
+                            <div class="balance-icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                        </div>
+
+                        <!-- Redeem Grid -->
+                        <div class="redeem-section">
+                            <h3>Redeem Rewards</h3>
+                            <div class="coupon-grid">
+                                <div class="coupon disabled">
+                                    <div class="coupon-img"><i class="fas fa-bolt"></i></div>
+                                    <div class="coupon-info">
+                                        <h4>$5 Bill Credit</h4>
+                                        <p>5,000 Points</p>
+                                        <button disabled>Locked</button>
+                                    </div>
+                                </div>
+                                <div class="coupon">
+                                    <div class="coupon-img green"><i class="fas fa-shopping-bag"></i></div>
+                                    <div class="coupon-info">
+                                        <h4>Trash Bags</h4>
+                                        <p>2,500 Points</p>
+                                        <button>Redeem</button>
+                                    </div>
+                                </div>
+                                <div class="coupon">
+                                    <div class="coupon-img teal"><i class="fas fa-tree"></i></div>
+                                    <div class="coupon-info">
+                                        <h4>Plant a Tree</h4>
+                                        <p>1,000 Points</p>
+                                        <button>Donate</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+    <!-- Upload -->
+<div class="upload-box" id="upload-box">
+  <div class="upload-box" id="upload-box">
+    <i class="fas fa-cloud-upload-alt"></i>
+    <p><strong>Click to upload</strong> waste image (Optional)</p>
+    <span class="note">JPG, PNG up to 5MB</span>
+
+    <!-- Hidden real file input -->
+    <input type="file" id="waste-img" accept="image/*" style="display: none;">
+</div>
+
+
+    <script src="dashbaord.js"></script>
+</body>
+</html>
