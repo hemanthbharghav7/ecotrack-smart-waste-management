@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanPick | Admin Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        html { font-family: 'Inter', sans-serif; }
+        
+        /* --- Shared Aesthetics (Emerald Theme) --- */
+        body { 
+            background: linear-gradient(-45deg, #064e3b, #111827, #065f46, #1f2937); 
+            background-size: 400% 400%; 
+            animation: gradient-bg 15s ease infinite; 
+            color: #e5e7eb; 
+            min-height: 100vh;
+        }
+        @keyframes gradient-bg { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+
+        /* Glassmorphism */
+        .glass-base {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-panel { 
+            background: rgba(31, 41, 55, 0.4); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navigation */
+        .menu-item { transition: all 0.2s ease; color: #9ca3af; font-weight: 500; display: block; }
+        .menu-item:hover { background: rgba(52, 211, 153, 0.1); color: #34d399; }
+        .menu-item.active { background: rgba(52, 211, 153, 0.15); color: #34d399; border-left: 3px solid #34d399; }
+
+        /* Status Badges */
+        .badge-pending { @apply bg-yellow-500/10 text-yellow-400 border border-yellow-500/20; }
+        .badge-approved { @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20; }
+        .badge-rejected { @apply bg-red-500/10 text-red-400 border border-red-500/20; }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="glass-base w-64 fixed md:static inset-y-0 left-0 z-30 flex flex-col transition-transform duration-300">
+        <div class="h-20 flex items-center px-6 font-bold text-xl border-b border-gray-700">
+            <i class="fas fa-shield-alt text-emerald-400 mr-3"></i> Admin Panel
+        </div>
+
+        <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+            <a href="index.html" class="menu-item px-4 py-3 rounded-lg"><i class="fas fa-arrow-left mr-3"></i>Back to App</a>
+            <a href="#" class="menu-item active px-4 py-3 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i>Overview</a>
+            <a href="#" class="menu-item px-4 py-3 rounded-lg"><i class="fas fa-users mr-3"></i>Users</a>
+            <a href="#" class="menu-item px-4 py-3 rounded-lg"><i class="fas fa-truck mr-3"></i>Drivers</a>
+            <a href="#" class="menu-item px-4 py-3 rounded-lg"><i class="fas fa-cog mr-3"></i>System</a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-700">
+            <button onclick="window.location.href='index.html'" class="w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 text-gray-400 transition-colors">
+                <i class="fas fa-sign-out-alt mr-3"></i>Exit Admin
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-1 flex flex-col h-full relative">
+        
+        <!-- Header -->
+        <header class="h-20 glass-base border-b border-none flex items-center justify-between px-8 z-10 flex-shrink-0">
+            <div>
+                <h1 class="text-2xl font-bold text-white">Dashboard Overview</h1>
+                <p class="text-sm text-gray-400">Manage pickup requests and system status.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-emerald-400 font-bold">Admin</span>
+                <div class="h-10 w-10 rounded-full bg-emerald-500 p-[2px]">
+                    <div class="h-full w-full rounded-full bg-gray-900 flex items-center justify-center text-white font-bold">A</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="flex-1 overflow-y-auto p-8 scroll-smooth">
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="glass-panel p-6 rounded-2xl border-b-4 border-blue-500">
+                    <div class="text-gray-400 text-xs font-bold uppercase mb-2">Total Requests</div>
+                    <div class="text-3xl font-bold text-white" id="stat-total">0</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border-b-4 border-yellow-500">
+                    <div class="text-gray-400 text-xs font-bold uppercase mb-2">Pending Actions</div>
+                    <div class="text-3xl font-bold text-white" id="stat-pending">0</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border-b-4 border-emerald-500">
+                    <div class="text-gray-400 text-xs font-bold uppercase mb-2">Completed</div>
+                    <div class="text-3xl font-bold text-white" id="stat-completed">0</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border-b-4 border-purple-500">
+                    <div class="text-gray-400 text-xs font-bold uppercase mb-2">Active Users</div>
+                    <div class="text-3xl font-bold text-white">12</div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="glass-panel rounded-2xl overflow-hidden">
+                <div class="p-6 border-b border-gray-700/50 flex justify-between items-center">
+                    <h3 class="font-bold text-white text-lg">Recent Pickup Requests</h3>
+                    <button onclick="fetchPickups()" class="text-xs text-emerald-400 hover:text-white transition-colors"><i class="fas fa-sync-alt mr-1"></i> Refresh</button>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-gray-400 text-xs uppercase bg-gray-900/50 border-b border-gray-700">
+                                <th class="p-4">User</th>
+                                <th class="p-4">Waste Type</th>
+                                <th class="p-4">Location</th>
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pickups-table-body" class="text-sm text-gray-300 divide-y divide-gray-700/50">
+                            <!-- Rows will be injected here by JS -->
+                            <tr>
+                                <td colspan="6" class="p-8 text-center text-gray-500">Loading data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy } 
+            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDAhJnY13QBO2gRzRGVLdItKKZ3MG4aZNU",
+            authDomain: "waste-management-proj-149e0.firebaseapp.com",
+            projectId: "waste-management-proj-149e0",
+            storageBucket: "waste-management-proj-149e0.firebasestorage.app",
+            messagingSenderId: "458437538288",
+            appId: "1:458437538288:web:1cf2005be98e44e124ad35",
+            measurementId: "G-W9DFLL8150"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fetch Data Function
+        window.fetchPickups = async () => {
+            const tbody = document.getElementById('pickups-table-body');
+            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-gray-500">Refreshing...</td></tr>';
+
+            try {
+                // Rule: No complex queries (orderBy) without creating an index first. 
+                // Using basic collection fetch then sorting in JS to avoid errors.
+                const querySnapshot = await getDocs(collection(db, "pickups"));
+                
+                let pickups = [];
+                querySnapshot.forEach((doc) => {
+                    pickups.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort by date (newest first) manually
+                pickups.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+                // Update Stats
+                document.getElementById('stat-total').innerText = pickups.length;
+                document.getElementById('stat-pending').innerText = pickups.filter(p => p.status === 'Pending').length;
+                document.getElementById('stat-completed').innerText = pickups.filter(p => p.status === 'Approved').length;
+
+                // Render Table
+                if (pickups.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-gray-500">No requests found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                pickups.forEach(p => {
+                    const statusClass = p.status === 'Approved' ? 'badge-approved' : (p.status === 'Rejected' ? 'badge-rejected' : 'badge-pending');
+                    
+                    const row = `
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="p-4">
+                                <div class="font-bold text-white">${p.userEmail?.split('@')[0] || 'Unknown'}</div>
+                                <div class="text-xs text-gray-500">${p.userEmail || ''}</div>
+                            </td>
+                            <td class="p-4">${p.wasteType}</td>
+                            <td class="p-4 truncate max-w-xs" title="${p.address}">${p.address}</td>
+                            <td class="p-4 text-gray-400">${p.pickupDate || 'N/A'}</td>
+                            <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${statusClass}">${p.status}</span></td>
+                            <td class="p-4 text-right space-x-2">
+                                ${p.status === 'Pending' ? `
+                                    <button onclick="updateStatus('${p.id}', 'Approved')" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-bold transition-colors">Approve</button>
+                                    <button onclick="updateStatus('${p.id}', 'Rejected')" class="px-3 py-1 bg-red-600 hover:bg-red-500 text-white rounded text-xs font-bold transition-colors">Reject</button>
+                                ` : '<span class="text-xs text-gray-600">No actions</span>'}
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-400">Error loading data: ${error.message}</td></tr>`;
+            }
+        };
+
+        // Update Status Function
+        window.updateStatus = async (docId, newStatus) => {
+            try {
+                const btn = event.target;
+                btn.innerText = "...";
+                await updateDoc(doc(db, "pickups", docId), {
+                    status: newStatus
+                });
+                fetchPickups(); // Refresh table
+            } catch (error) {
+                alert("Error updating status: " + error.message);
+            }
+        };
+
+        // Initial Load
+        fetchPickups();
+
+    </script>
+</body>
+</html>
