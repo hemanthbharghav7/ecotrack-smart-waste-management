@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup - EcoTrack</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0fdf4', 100: '#dcfce7', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 900: '#14532d' },
+                        midnight: '#0f172a',
+                    },
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .active-role { border-color: #22c55e; color: #166534; background-color: #f0fdf4; }
+        .inactive-role { border-color: transparent; color: #64748b; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <nav class="w-full h-20 flex items-center justify-between px-6 bg-white border-b border-slate-100">
+        <a href="#" class="flex items-center gap-2 cursor-pointer">
+            <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center text-white">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <span class="font-bold text-xl text-midnight">EcoTrack</span>
+        </a>
+    </nav>
+
+    <div class="flex-1 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-5xl flex flex-col md:flex-row min-h-[600px] fade-in">
+            
+            <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col">
+                
+                <div class="flex p-1 bg-slate-100 rounded-xl mb-8">
+                    <button onclick="switchRole('resident')" id="btn-role-resident" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all shadow-sm active-role border-2">
+                        <i class="fas fa-user mr-2"></i> Resident
+                    </button>
+                    <button onclick="switchRole('driver')" id="btn-role-driver" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all border-2 inactive-role hover:bg-white/50">
+                        <i class="fas fa-truck mr-2"></i> Driver
+                    </button>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold text-midnight" id="auth-title">Welcome Back</h2>
+                    <p class="text-slate-500 text-sm mt-1" id="auth-subtitle">Login to schedule your pickup.</p>
+                </div>
+
+                <div class="flex-1">
+                    
+                    <div id="role-resident-forms">
+                        <form id="form-resident-login" class="space-y-4" onsubmit="handleAuth(event, 'login', 'resident')">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Email Address</label>
+                                <input type="email" id="res-login-email" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-brand-500 outline-none" placeholder="name@example.com">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Password</label>
+                                <input type="password" id="res-login-pass" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-brand-500 outline-none" placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="w-full bg-midnight hover:bg-slate-800 text-white font-bold py-3 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5">
+                                Login as Resident
+                            </button>
+                        </form>
+
+                        <form id="form-resident-signup" class="space-y-4 hidden" onsubmit="handleAuth(event, 'signup', 'resident')">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">First Name</label><input type="text" id="res-signup-fname" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-brand-500 outline-none"></div>
+                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Last Name</label><input type="text" id="res-signup-lname" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-brand-500 outline-none"></div>
+                            </div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Email Address</label><input type="email" id="res-signup-email" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-brand-500 outline-none"></div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Password</label>
+                                <input type="password" id="res-signup-pass" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-brand-500 outline-none">
+                            </div>
+                            <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5">Register & Verify Email</button>
+                        </form>
+                    </div>
+
+                    <div id="role-driver-forms" class="hidden">
+                        <form id="form-driver-login" class="space-y-4" onsubmit="handleAuth(event, 'login', 'driver')">
+                            <div class="p-3 bg-blue-50 text-blue-700 text-sm rounded-lg flex items-center gap-2"><i class="fas fa-info-circle"></i> Driver portal access.</div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Email Address</label>
+                                <input type="email" id="driver-login-email" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Password</label>
+                                <input type="password" id="driver-login-pass" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none">
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5">Login to Fleet</button>
+                        </form>
+
+                        <form id="form-driver-signup" class="space-y-4 hidden" onsubmit="handleAuth(event, 'signup', 'driver')">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Full Name</label><input type="text" id="driver-signup-name" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none"></div>
+                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Phone</label><input type="tel" id="driver-signup-phone" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none"></div>
+                            </div>
+                            
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                                <h3 class="text-xs font-bold text-blue-600 uppercase">Vehicle Details</h3>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Vehicle No.</label>
+                                        <input type="text" id="driver-signup-plate" placeholder="KA-01-AB-1234" required class="w-full px-3 py-2 text-sm rounded-lg bg-white border border-slate-200 focus:border-blue-500 outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Vehicle Type</label>
+                                        <select id="driver-signup-vehicle" class="w-full px-3 py-2 text-sm rounded-lg bg-white border border-slate-200 focus:border-blue-500 outline-none">
+                                            <option>Mini Truck (Tata Ace)</option>
+                                            <option>E-Rickshaw</option>
+                                            <option>Van</option>
+                                            <option>Heavy Truck</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Driving License No.</label>
+                                    <input type="text" id="driver-signup-license" placeholder="DL-1234567890123" required class="w-full px-3 py-2 text-sm rounded-lg bg-white border border-slate-200 focus:border-blue-500 outline-none">
+                                </div>
+                            </div>
+
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Email Address</label><input type="email" id="driver-signup-email" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none"></div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Password</label>
+                                <input type="password" id="driver-signup-pass" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none">
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5">Register & Verify</button>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div class="mt-6 text-center pt-6 border-t border-slate-100">
+                    <p class="text-slate-500 text-sm" id="auth-footer-text">Don't have an account?</p>
+                    <button onclick="toggleAuthMode()" id="btn-auth-toggle" class="text-brand-600 font-bold hover:underline">Sign up now</button>
+                </div>
+            </div>
+
+            <div class="hidden md:block md:w-1/2 bg-cover bg-center relative transition-all duration-500" id="auth-image-side" style="background-image: url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');">
+                <div class="absolute inset-0 bg-brand-900/40 backdrop-blur-[2px]"></div>
+                <div class="absolute bottom-12 left-12 right-12 text-white">
+                    <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6"><i class="fas fa-quote-left text-3xl"></i></div>
+                    <p class="text-xl font-light leading-relaxed mb-4">"EcoTrack has completely changed how our society manages waste. It's clean, efficient, and rewarding."</p>
+                    <div class="font-bold text-lg" id="quote-author">— Priya Sharma, Bangalore</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'resident'; 
+        let currentMode = 'login';     
+
+        const titleEl = document.getElementById('auth-title');
+        const subtitleEl = document.getElementById('auth-subtitle');
+        const footerTextEl = document.getElementById('auth-footer-text');
+        const toggleBtnEl = document.getElementById('btn-auth-toggle');
+        const imageSide = document.getElementById('auth-image-side');
+        
+        const residentBtn = document.getElementById('btn-role-resident');
+        const driverBtn = document.getElementById('btn-role-driver');
+
+        function updateUI() {
+            if(currentRole === 'resident') {
+                residentBtn.className = "flex-1 py-2 text-sm font-bold rounded-lg transition-all shadow-sm active-role border-2";
+                driverBtn.className = "flex-1 py-2 text-sm font-bold rounded-lg transition-all border-2 inactive-role hover:bg-white/50";
+                
+                document.getElementById('role-resident-forms').classList.remove('hidden');
+                document.getElementById('role-driver-forms').classList.add('hidden');
+                
+                toggleBtnEl.classList.remove('text-blue-600');
+                toggleBtnEl.classList.add('text-brand-600');
+                
+                if(currentMode === 'login') {
+                    document.getElementById('form-resident-login').classList.remove('hidden');
+                    document.getElementById('form-resident-signup').classList.add('hidden');
+                } else {
+                    document.getElementById('form-resident-login').classList.add('hidden');
+                    document.getElementById('form-resident-signup').classList.remove('hidden');
+                }
+
+            } else { // Driver
+                driverBtn.className = "flex-1 py-2 text-sm font-bold rounded-lg transition-all shadow-sm border-2 border-blue-500 text-blue-700 bg-blue-50";
+                residentBtn.className = "flex-1 py-2 text-sm font-bold rounded-lg transition-all border-2 inactive-role hover:bg-white/50";
+                
+                document.getElementById('role-resident-forms').classList.add('hidden');
+                document.getElementById('role-driver-forms').classList.remove('hidden');
+
+                toggleBtnEl.classList.remove('text-brand-600');
+                toggleBtnEl.classList.add('text-blue-600');
+
+                if(currentMode === 'login') {
+                    document.getElementById('form-driver-login').classList.remove('hidden');
+                    document.getElementById('form-driver-signup').classList.add('hidden');
+                } else {
+                    document.getElementById('form-driver-login').classList.add('hidden');
+                    document.getElementById('form-driver-signup').classList.remove('hidden');
+                }
+            }
+
+            if (currentMode === 'login') {
+                titleEl.textContent = "Welcome Back";
+                subtitleEl.textContent = currentRole === 'resident' ? "Login to schedule your pickup." : "Access your fleet dashboard.";
+                footerTextEl.textContent = "Don't have an account?";
+                toggleBtnEl.textContent = "Sign up now";
+            } else {
+                titleEl.textContent = "Create Account";
+                subtitleEl.textContent = currentRole === 'resident' ? "Start earning rewards for recycling." : "Join our fleet. Vehicle details required.";
+                footerTextEl.textContent = "Already have an account?";
+                toggleBtnEl.textContent = "Log in";
+            }
+
+            if(currentRole === 'driver') {
+                imageSide.style.backgroundImage = "url('https://images.unsplash.com/photo-1616432043562-3671ea2e5242?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')";
+                document.getElementById('quote-author').innerText = "— Rajesh Kumar, Fleet Partner";
+            } else {
+                imageSide.style.backgroundImage = "url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80')";
+                document.getElementById('quote-author').innerText = "— Priya Sharma, Bangalore";
+            }
+        }
+
+        window.switchRole = function(role) {
+            currentRole = role;
+            currentMode = 'login';
+            updateUI();
+        }
+
+        window.toggleAuthMode = function() {
+            currentMode = currentMode === 'login' ? 'signup' : 'login';
+            updateUI();
+        }
+
+        updateUI();
+    </script>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            updateProfile, 
+            signOut,
+            sendEmailVerification 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        window.handleAuth = async function(e, mode, role) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            try {
+                let email, pass;
+
+                // --- SIGNUP LOGIC ---
+                if (mode === 'signup') {
+                    if (role === 'resident') {
+                        email = document.getElementById('res-signup-email').value;
+                        pass = document.getElementById('res-signup-pass').value;
+                        const fname = document.getElementById('res-signup-fname').value;
+                        const lname = document.getElementById('res-signup-lname').value || '';
+                        
+                        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                        
+                        // 1. Send Verification
+                        await sendEmailVerification(cred.user);
+                        
+                        // 2. Save Data
+                        await updateProfile(cred.user, { displayName: `${fname} ${lname}`.trim() });
+                        await setDoc(doc(db, "users", cred.user.uid), { 
+                            firstName: fname, 
+                            lastName: lname, 
+                            email, 
+                            role: 'resident', 
+                            createdAt: new Date() 
+                        });
+
+                        // 3. Force Logout & Notify
+                        await signOut(auth);
+                        alert(`Account created successfully!\n\nA verification email has been sent to ${email}.\nPlease verify your email before logging in.`);
+                        location.reload(); // Refresh to clear form
+
+                    } else { // Driver
+                        email = document.getElementById('driver-signup-email').value;
+                        pass = document.getElementById('driver-signup-pass').value;
+                        const name = document.getElementById('driver-signup-name').value;
+                        const phone = document.getElementById('driver-signup-phone').value;
+                        const vehicleType = document.getElementById('driver-signup-vehicle').value;
+                        const plateNo = document.getElementById('driver-signup-plate').value;
+                        const licenseNo = document.getElementById('driver-signup-license').value;
+
+                        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                        
+                        // 1. Send Verification
+                        await sendEmailVerification(cred.user);
+
+                        // 2. Save EXTENDED Driver Data
+                        await updateProfile(cred.user, { displayName: name });
+                        await setDoc(doc(db, "users", cred.user.uid), { 
+                            firstName: name, 
+                            email, 
+                            phone: phone,
+                            role: 'driver', 
+                            vehicleDetails: {
+                                type: vehicleType,
+                                plateNumber: plateNo,
+                                licenseNumber: licenseNo
+                            },
+                            status: 'active', // can be used later for admin approval
+                            createdAt: new Date() 
+                        });
+
+                        // 3. Force Logout & Notify
+                        await signOut(auth);
+                        alert(`Fleet account created!\n\nA verification email has been sent to ${email}.\nPlease verify your email to activate your driver dashboard.`);
+                        location.reload();
+                    }
+
+                // --- LOGIN LOGIC (STRICT) ---
+                } else { 
+                    if (role === 'resident') {
+                        email = document.getElementById('res-login-email').value;
+                        pass = document.getElementById('res-login-pass').value;
+                    } else {
+                        email = document.getElementById('driver-login-email').value;
+                        pass = document.getElementById('driver-login-pass').value;
+                    }
+
+                    const cred = await signInWithEmailAndPassword(auth, email, pass);
+                    
+                    // 1. Check Email Verification
+                    if (!cred.user.emailVerified) {
+                        await signOut(auth);
+                        throw new Error("Email not verified. Please check your inbox and verify your email to continue.");
+                    }
+
+                    // 2. Check Strict Role
+                    const docSnap = await getDoc(doc(db, "users", cred.user.uid));
+                    if(docSnap.exists()) {
+                        const storedRole = docSnap.data().role;
+                        if (storedRole !== role) {
+                            await signOut(auth);
+                            throw new Error(`Access Denied: This account is registered as a ${storedRole.toUpperCase()}. Please switch tabs to login.`);
+                        }
+                        
+                        // Redirect
+                        window.location.href = role === 'driver' ? 'driver.html' : 'resident.html';
+                    } else {
+                        throw new Error("User profile not found.");
+                    }
+                }
+
+            } catch (error) {
+                console.error(error);
+                let msg = error.message;
+                // Make Firebase errors readable
+                if(msg.includes("auth/invalid-credential")) msg = "Incorrect email or password.";
+                if(msg.includes("auth/email-already-in-use")) msg = "This email is already registered.";
+                if(msg.includes("auth/too-many-requests")) msg = "Too many attempts. Try again later.";
+                
+                alert(msg);
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
