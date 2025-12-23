@@ -8,13 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script type="module" src="chatbot.js"></script>
 
@@ -40,7 +36,6 @@
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Navigation & Sidebar */
         .nav-btn { width: 100%; display: flex; align-items: center; padding: 0.75rem 2rem; transition: all 0.2s; font-weight: 500; color: #64748b; }
         .nav-btn:hover { background-color: #f8fafc; color: #16a34a; }
         .dark .nav-btn:hover { background-color: #1e293b; color: #4ade80; }
@@ -49,13 +44,11 @@
         
         #sidebar-overlay.open { opacity: 1; pointer-events: auto; }
         
-        /* Range Slider */
         input[type=range] { appearance: none; -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; background: #22c55e; border: 4px solid white; cursor: pointer; margin-top: -10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #e2e8f0; border-radius: 999px; }
         .dark input[type=range]::-webkit-slider-runnable-track { background: #334155; }
 
-        /* Glow Effect for Schedule Card - STRONG GREEN GLOW */
         .glow-card { transition: all 0.3s ease; border: 1px solid transparent; }
         .glow-card:hover {
             box-shadow: 0 0 50px rgba(34, 197, 94, 0.6); 
@@ -67,10 +60,6 @@
             border-color: rgba(74, 222, 128, 0.3);
         }
         
-        /* MAPS ADDITION: Fix Leaflet z-index */
-        .leaflet-pane { z-index: 10 !important; }
-        .leaflet-control { z-index: 11 !important; }
-
         /* SEARCH BAR STYLES */
         .search-results {
             max-height: 200px;
@@ -80,7 +69,7 @@
             z-index: 50;
             background: white;
             border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             margin-top: 0.5rem;
             border: 1px solid #e2e8f0;
         }
@@ -89,11 +78,13 @@
             border-color: #334155;
         }
         .search-item {
-            padding: 0.75rem 1rem;
+            padding: 1rem;
             cursor: pointer;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
             border-bottom: 1px solid #f1f5f9;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
         }
         .dark .search-item { border-color: #334155; color: #cbd5e1; }
         .search-item:hover { background-color: #f0fdf4; color: #15803d; }
@@ -418,11 +409,18 @@
                                 <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Pickup Address</label>
                                 
                                 <div class="relative mb-3">
-                                    <div class="relative">
-                                        <i class="fas fa-search absolute left-4 top-3.5 text-slate-400"></i>
-                                        <input type="text" id="input-address" required placeholder="Search for area, street..." autocomplete="off"
-                                            class="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-darkcard text-sm dark:text-white focus:border-brand-500 outline-none shadow-sm transition-shadow focus:shadow-md">
-                                        <button type="button" onclick="document.getElementById('input-address').value=''" class="absolute right-3 top-3 text-slate-400 hover:text-red-500 hidden" id="clear-search"><i class="fas fa-times"></i></button>
+                                    <div class="flex gap-2">
+                                        <div class="relative flex-1">
+                                            <i class="fas fa-search absolute left-4 top-3.5 text-slate-400 z-10"></i>
+                                            <input type="text" id="input-address" required placeholder="Search area (India only)..." autocomplete="off"
+                                                class="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-darkcard text-sm dark:text-white focus:border-brand-500 outline-none shadow-sm transition-all focus:ring-2 focus:ring-brand-200">
+                                            <button type="button" onclick="document.getElementById('input-address').value=''" class="absolute right-3 top-3 text-slate-400 hover:text-red-500 hidden z-10" id="clear-search"><i class="fas fa-times"></i></button>
+                                        </div>
+                                        <button type="button" id="btn-locate" onclick="app.getCurrentLocation()" 
+                                            class="px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white transition-all flex items-center gap-2 font-bold shadow-lg shadow-brand-200 dark:shadow-none whitespace-nowrap active:scale-95"
+                                            title="Detect precise location">
+                                            <i class="fas fa-crosshairs"></i> <span class="hidden sm:inline" id="locate-text">Locate Me</span>
+                                        </button>
                                     </div>
                                     <div id="address-suggestions" class="hidden search-results"></div>
                                 </div>
@@ -431,15 +429,7 @@
                                     <option value="">📂 Select a saved address...</option>
                                 </select>
 
-                                <div id="map" class="h-48 w-full rounded-xl border-2 border-slate-200 dark:border-slate-600 mb-3 z-0 overflow-hidden shadow-inner relative">
-                                    <div class="absolute bottom-2 right-2 z-[400]">
-                                        <button type="button" id="btn-locate" onclick="app.getCurrentLocation()" class="bg-white dark:bg-slate-800 p-2 rounded-lg shadow-md hover:bg-slate-50 text-slate-600 dark:text-white" title="Current Location">
-                                            <i class="fas fa-crosshairs"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <label class="flex items-center gap-2 cursor-pointer">
+                                <label class="flex items-center gap-2 cursor-pointer mt-2">
                                     <input type="checkbox" id="save-address-chk" class="rounded text-brand-600 focus:ring-brand-500">
                                     <span class="text-xs text-slate-500">Save address for future</span>
                                 </label>
@@ -479,9 +469,9 @@
                             </select>
                             <select id="filter-weight" onchange="app.applyHistoryFilters()" class="px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-xs font-bold text-slate-600 dark:text-slate-300 outline-none">
                                 <option value="All">All Weights</option>
-                                <option value="small">&lt; 10 kg</option>
+                                <option value="small">< 10 kg</option>
                                 <option value="medium">10 - 30 kg</option>
-                                <option value="large">&gt; 30 kg</option>
+                                <option value="large">> 30 kg</option>
                             </select>
                         </div>
                     </div>
@@ -570,7 +560,6 @@
         let allPickupsData = []; 
 
         // *** MAPS & SEARCH VARIABLES ***
-        let map, marker;
         let searchTimeout;
 
         // *** RATE PLAN CONFIGURATION (Multiplier Logic) ***
@@ -625,45 +614,8 @@
             
             // Force Dashboard View on Load
             document.getElementById('view-dashboard').classList.remove('hidden');
-
-            // MAPS ADDITION: Init Map & Search Listeners
-            initMap();
             setupSearchListeners();
         });
-
-        // *** MAPS ADDITION: Initialize Map ***
-        function initMap() {
-            // Default center (Bangalore)
-            map = L.map('map').setView([12.9716, 77.5946], 13); 
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap'
-            }).addTo(map);
-
-            // Add draggable marker
-            marker = L.marker([12.9716, 77.5946], {draggable: true}).addTo(map);
-
-            // Update address when user drags marker
-            marker.on('dragend', async function(e) {
-                const pos = marker.getLatLng();
-                const btnIcon = document.querySelector('#btn-locate i');
-                if(btnIcon) btnIcon.classList.add('fa-spin');
-                
-                try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`);
-                    const data = await response.json();
-                    if(data.display_name) {
-                        document.getElementById('input-address').value = data.display_name;
-                        // Hide dropdown if open
-                        document.getElementById('address-suggestions').classList.add('hidden');
-                    }
-                } catch(err) {
-                    console.error(err);
-                } finally {
-                    if(btnIcon) btnIcon.classList.remove('fa-spin');
-                }
-            });
-        }
 
         // *** SEARCH BAR LOGIC (Google Style Autocomplete) ***
         function setupSearchListeners() {
@@ -687,8 +639,8 @@
 
                 searchTimeout = setTimeout(async () => {
                     try {
-                        // Search using OSM Nominatim
-                        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
+                        // Search using OSM Nominatim (LIMITED TO INDIA via countrycodes=in)
+                        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&countrycodes=in`);
                         const data = await response.json();
                         
                         // Render Suggestions
@@ -723,16 +675,8 @@
         function selectPlace(place) {
             const input = document.getElementById('input-address');
             const results = document.getElementById('address-suggestions');
-            
-            // 1. Update Input
             input.value = place.display_name;
             results.classList.add('hidden');
-
-            // 2. Move Map & Marker
-            const lat = parseFloat(place.lat);
-            const lon = parseFloat(place.lon);
-            map.setView([lat, lon], 16);
-            marker.setLatLng([lat, lon]);
         }
 
         // *** FIREBASE LOGIC ***
@@ -795,7 +739,7 @@
             let actionBtns = '';
             if (isHistoryView) {
                 const cancelBtn = p.status === 'Pending' ? `<button onclick="app.openCancelModal('${p.id}')" class="flex-1 py-2 text-xs font-bold text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors border border-dashed border-red-200 dark:border-red-900/30"><i class="fas fa-times-circle mr-1"></i> Cancel</button>` : '';
-                actionBtns = `<div class="flex gap-2 mt-3">${cancelBtn}<button onclick='app.openDetailsModal(${JSON.stringify(p).replace(/'/g, "&#39;")})' class="flex-1 py-2 text-xs font-bold text-slate-500 hover:text-brand-600 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors border border-slate-200 dark:border-slate-700"><i class="fas fa-eye mr-1"></i> View Details</button></div>`;
+                actionBtns = `<div class="flex gap-2 mt-3">${cancelBtn}<button onclick='app.openDetailsModal(${JSON.stringify(p).replace(/'/g, "'")})' class="flex-1 py-2 text-xs font-bold text-slate-500 hover:text-brand-600 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors border border-slate-200 dark:border-slate-700"><i class="fas fa-eye mr-1"></i> View Details</button></div>`;
             }
 
             let badgeClass = 'text-brand-600 bg-brand-50 dark:bg-slate-700';
@@ -943,37 +887,78 @@
 
         app.getCurrentLocation = () => {
             if (!navigator.geolocation) return showToast("Geolocation not supported", "error");
+            
             const btnIcon = document.querySelector('#btn-locate i');
+            const btnText = document.querySelector('#locate-text');
+            const originalText = btnText ? btnText.innerText : "Locate Me";
+
+            // 1. UI Loading State
             if(btnIcon) btnIcon.classList.add('fa-spin');
-            const options = { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 };
-            navigator.geolocation.getCurrentPosition(async (p) => {
+            if(btnText) btnText.innerText = "Scanning...";
+
+            // 2. Success Handler (Shared)
+            const handleSuccess = async (p) => {
                 try {
                     const lat = p.coords.latitude;
                     const lon = p.coords.longitude;
-                    document.getElementById('input-address').placeholder = "Fetching address...";
-                    map.setView([lat, lon], 18);
-                    marker.setLatLng([lat, lon]);
+                    document.getElementById('input-address').placeholder = "Fetching address name...";
+                    
                     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
                     const response = await fetch(url, { headers: { 'User-Agent': 'EcoTrack/1.0' } });
                     const data = await response.json();
+                    
                     if(data.display_name) {
                         document.getElementById('input-address').value = data.display_name;
                         showToast("Location found!", "success");
-                    } else throw new Error("Address not found");
+                    } else {
+                        throw new Error("Address not found");
+                    }
                 } catch (e) {
                     document.getElementById('input-address').value = `${p.coords.latitude}, ${p.coords.longitude}`;
-                    showToast("Address lookup failed. Using coordinates.", "warning");
+                    showToast("Found coordinates (Address lookup failed)", "warning");
                 } finally {
-                    if(btnIcon) btnIcon.classList.remove('fa-spin');
+                    resetUI();
                 }
-            }, (error) => {
-                if(btnIcon) btnIcon.classList.remove('fa-spin');
+            };
+
+            // 3. Error Handler (The Smart Part)
+            const handleError = (error) => {
+                // If it was a Timeout (Code 3) and we were using High Accuracy...
+                if (error.code === 3 && options.enableHighAccuracy) {
+                    console.log("⚠️ High Accuracy timed out. Switching to Low Accuracy...");
+                    showToast("GPS weak. Switching to Wi-Fi location...", "warning");
+                    
+                    // RETRY with Low Accuracy
+                    options.enableHighAccuracy = false; 
+                    options.timeout = 10000; // Give it another 10s
+                    navigator.geolocation.getCurrentPosition(handleSuccess, finalError, options);
+                } else {
+                    finalError(error);
+                }
+            };
+
+            const finalError = (error) => {
+                resetUI();
                 let msg = "Location error.";
-                if (error.code === 1) msg = "Permission denied.";
-                if (error.code === 2) msg = "Position unavailable.";
-                if (error.code === 3) msg = "Request timed out.";
+                if (error.code === 1) msg = "Permission denied. Allow location access.";
+                if (error.code === 2) msg = "Position unavailable (No GPS/Wi-Fi).";
+                if (error.code === 3) msg = "Location request timed out completely.";
                 showToast(msg, "error");
-            }, options);
+            };
+
+            const resetUI = () => {
+                if(btnIcon) btnIcon.classList.remove('fa-spin');
+                if(btnText) btnText.innerText = originalText;
+            };
+
+            // 4. Initial Attempt: High Accuracy, 3 seconds timeout (Indoors Optimization)
+            let options = { 
+                enableHighAccuracy: true, 
+                timeout: 3000, 
+                maximumAge: 0 
+            };
+            
+            navigator.geolocation.getCurrentPosition(handleSuccess, handleError, options);
         };
 
         app.applyHistoryFilters = () => {
@@ -1033,9 +1018,6 @@
             chartInstance = new Chart(ctx, { type: 'bar', data: { labels: Object.keys(types).length ? Object.keys(types) : ['No Data'], datasets: [{ label: 'Pickups', data: Object.values(types).length ? Object.values(types) : [0], backgroundColor: ['#3b82f6', '#22c55e', '#a855f7', '#f97316'], borderRadius: 5 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } });
         }
         app.switchView = (viewId) => { ['dashboard','schedule','history','rewards','settings','analytics'].forEach(id => { document.getElementById('view-'+id).classList.add('hidden'); document.getElementById('nav-'+id).classList.remove('active'); }); document.getElementById('view-'+viewId).classList.remove('hidden'); document.getElementById('nav-'+viewId).classList.add('active'); if(window.innerWidth < 768) app.toggleSidebar(); 
-        
-        // MAPS ADDITION: Fix map render on view switch
-        if(viewId === 'schedule' && map) setTimeout(() => map.invalidateSize(), 200);
         };
         app.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebar-overlay').classList.toggle('open'); };
         app.toggleProfileMenu = () => { const m = document.getElementById('profile-menu'); const o = document.getElementById('profile-overlay'); m.classList.toggle('hidden'); o.classList.toggle('hidden'); };
