@@ -8,7 +8,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase
 
 // 2. Your Configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDAhJnY13QBO2gRzRGVLdItKKZ3MG4aZNU",
+    apiKey: "",
     authDomain: "waste-management-proj-149e0.firebaseapp.com",
     projectId: "waste-management-proj-149e0",
     storageBucket: "waste-management-proj-149e0.firebasestorage.app",
