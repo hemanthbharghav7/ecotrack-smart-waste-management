@@ -1,46 +1,110 @@
-🌍 EcoTrack: Smart Waste Management Platform
-EcoTrack is a digital solution designed to streamline waste collection and recycling in India. It connects residents with verified collectors through a smart, user-friendly interface, ensuring that waste is managed efficiently while rewarding sustainable behavior.
+# 🌍 EcoTrack – Smart Waste Management Platform
 
-🔗 Live Demo: https://ecotrack03.netlify.app/
+EcoTrack is a **smart digital platform designed to improve waste collection and recycling in India**.
+It connects **residents with verified waste collectors** through an intuitive interface, making recycling easier while **rewarding sustainable behavior**.
 
-✨ Core Features
-🏠 For Residents
-Smart Scheduling: Select your waste type (Plastic, E-waste, Metal) and get an instant price estimate before booking a pickup.
+🔗 **Live Demo:** https://ecotrack03.netlify.app/
 
-Live Tracking: Watch your assigned "Green Captain" arrive in real-time on the map.
+---
 
-Gamified Rewards: Earn EcoPoints for every kilogram you recycle. Level up your profile from 'Seed' to 'Forest'.
+# ✨ Features
 
-Report Dumps: Help the community by snapping photos of illegal garbage spots; the app auto-tags the location for cleanup.
+## 🏠 For Residents
 
-🚛 For Drivers
-Live Job Feed: See all nearby pickup requests with details on waste type and estimated earnings.
+### Smart Scheduling
 
-Integrated Navigation: One-tap directions to the customer’s doorstep for faster service.
+Users can select the **type of waste** they want to recycle (Plastic, E-waste, Metal) and receive an **instant price estimate** before booking a pickup.
 
-Earnings Dashboard: Track daily income, total waste collected, and reliability scores.
+### Live Tracking
 
-💰 Reward System
-Users can redeem their earned EcoPoints for various rewards:
+Track your assigned **"Green Captain"** in real-time through the interactive map and know exactly when they will arrive.
 
-Organic Compost (300 pts)
+### Gamified Rewards
 
-Eco Jute Bags (600 pts)
+Earn **EcoPoints** for every kilogram of waste recycled and level up your profile from **Seed → Tree → Forest**.
 
-Amazon Vouchers (1000 pts)
+### Report Illegal Dumps
 
-🛠️ Built With
-Frontend: React.js (Vite)
+Users can report illegal garbage dumping spots by **uploading photos**, and the system automatically **tags the location for cleanup**.
 
-Styling: Tailwind CSS
+---
 
-UI Components: Lucide React & Framer Motion
+## 🚛 For Drivers
 
-Deployment: Netlify
+### Live Job Feed
 
-📖 How It Works
-Book: Enter your location and schedule a pickup for your recyclables.
+Drivers can view **nearby pickup requests** with details such as waste type, pickup location, and estimated earnings.
 
-Collect: A verified driver arrives, weighs the waste digitally, and collects it.
+### Integrated Navigation
 
-Earn: Receive instant points in your digital wallet to spend on rewards or vouchers.
+One-tap navigation provides **quick directions to the user’s location**, ensuring faster pickups.
+
+### Earnings Dashboard
+
+Drivers can monitor:
+
+* Daily income
+* Total waste collected
+* Reliability score
+
+---
+
+# 💰 Reward System
+
+Users can redeem their **EcoPoints** for eco-friendly rewards.
+
+| Reward          | Points Required |
+| --------------- | --------------- |
+| Organic Compost | 300 pts         |
+| Eco Jute Bags   | 600 pts         |
+| Amazon Voucher  | 1000 pts        |
+
+---
+
+# 🛠️ Tech Stack
+
+**Frontend**
+
+* React.js (Vite)
+
+**Styling**
+
+* Tailwind CSS
+
+**UI Components**
+
+* Lucide React
+* Framer Motion
+
+**Deployment**
+
+* Netlify
+
+---
+
+# 📖 How It Works
+
+### 1️⃣ Book
+
+Enter your location and **schedule a pickup** for recyclable waste.
+
+### 2️⃣ Collect
+
+A **verified driver arrives**, weighs the waste digitally, and collects it.
+
+### 3️⃣ Earn
+
+Users receive **instant EcoPoints** in their wallet which can be redeemed for rewards.
+
+---
+
+# ♻️ Goal
+
+EcoTrack aims to:
+
+* Reduce unmanaged waste
+* Encourage responsible recycling
+* Digitize waste collection systems
+* Reward citizens for sustainable habits
+
+---
